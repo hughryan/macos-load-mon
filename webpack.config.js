@@ -18,6 +18,13 @@ module.exports = {
 					name: 'fonts/[name].[ext]',
 				},
 			},
+			{
+				test: /\.(ico)$/,
+				loader: 'file-loader',
+				options: {
+					name: '[name].[ext]',
+				},
+			},
 		],
 	},
 	resolve: { extensions: ['*', '.js', '.jsx'] },

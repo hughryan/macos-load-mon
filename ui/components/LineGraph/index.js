@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
+import shapes from '../shapes';
 
 const LineGraph = ({ data }) => (
 	<ResponsiveLine
@@ -60,22 +61,7 @@ const LineGraph = ({ data }) => (
 );
 
 LineGraph.propTypes = {
-	data: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string,
-		color: PropTypes.string,
-		data: PropTypes.arrayOf(PropTypes.shape({
-			x: PropTypes.oneOfType([
-				PropTypes.instanceOf(Date),
-				PropTypes.number,
-				PropTypes.string,
-			]),
-			y: PropTypes.oneOfType([
-				PropTypes.instanceOf(Date),
-				PropTypes.number,
-				PropTypes.string,
-			]),
-		})),
-	})).isRequired,
+	data: PropTypes.arrayOf(shapes.GraphDataSet).isRequired,
 };
 
 export default LineGraph;

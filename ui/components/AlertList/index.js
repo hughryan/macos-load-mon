@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Alert from '../Alert';
 import { AlertsContainer } from './style';
-import constants from '../../constants';
+import shapes from '../shapes';
 
 const AlertList = ({ alerts }) => (
 	<AlertsContainer>
@@ -13,13 +13,7 @@ const AlertList = ({ alerts }) => (
 );
 
 AlertList.propTypes = {
-	alerts: PropTypes.arrayOf(PropTypes.shape({
-		type: PropTypes.oneOf([
-			constants.ALERT,
-			constants.RECOVER,
-		]),
-		message: PropTypes.string,
-	})),
+	alerts: PropTypes.arrayOf(shapes.Alert),
 };
 
 AlertList.defaultProps = {

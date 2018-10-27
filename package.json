@@ -21,7 +21,8 @@
 		"pretest": "yarn lint",
 		"test": "nyc mocha",
 		"posttest": "rimraf .nyc_output",
-		"tdd": "mocha -w --reporter spec"
+		"tdd": "mocha -w --reporter spec",
+		"induceLoad": "node ./scripts/induceLoad.js"
 	},
 	"dependencies": {
 		"@nivo/line": "0.50.0",

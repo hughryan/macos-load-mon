@@ -67,14 +67,16 @@ const subscribe = (io) => {
 	io.on(constants.CONNECTION, (socket) => {
 		// emit latest status immediately to new clients
 		socket.emit(constants.LOAD, {
-			data: getLoadHistory(constants.LOAD_HISTORY_DURATION),
+			load: getLoadHistory(constants.LOAD_HISTORY_DURATION),
+			average: getCurrentLoadAverage(),
 		});
 	});
 
 	events.store.on(constants.LOAD, () => {
 		// emit latest status to socket listeners
 		io.emit(constants.LOAD, {
-			data: getLoadHistory(constants.LOAD_HISTORY_DURATION),
+			load: getLoadHistory(constants.LOAD_HISTORY_DURATION),
+			average: getCurrentLoadAverage(),
 		});
 	});
 };
@@ -83,6 +85,15 @@ const init = () => {
 	events.metric.on(constants.LOAD, (metric) => {
 		// add new metric to store
 		receiveLoadMetric(metric);
+	});
+
+	events.store.on(constants.LOAD, () => {
+		const load = getLastLoadMetric();
+		const average = getCurrentLoadAverage();
+
+		console.log(
+			`${load.timestamp}: load ${load.data.toFixed(2)} average ${average.data.toFixed(2)}`,
+		);
 	});
 };
 

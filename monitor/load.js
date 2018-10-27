@@ -5,7 +5,6 @@ const events = require('../events');
 
 const start = () => {
 	console.log('Monitoring load');
-	events.metric.on('load', load => console.log('Load:', load));
 
 	utils.sysctl.getCpuCount().then((cpuCount) => {
 		utils.interval(() => {

@@ -39,7 +39,9 @@ const observeLoadAverage = () => {
 	const currentLoadAverageString = currentLoadAverage.data.toFixed(constants.LOAD_DECIMAL_PLACES);
 	const currentLoadAverageTimeString = moment(currentLoadAverage.timestamp).toString();
 
-	if (currentLoadAverage && currentLoadAverage.data > constants.HIGH_LOAD_THRESHOLD) {
+	// if current load went from low to high
+	if (currentLoadAverage.data > constants.HIGH_LOAD_THRESHOLD
+		&& (previousLoadAverage === undefined || previousLoadAverage.data <= constants.HIGH_LOAD_THRESHOLD)) {
 		triggerLoadAlert(
 			currentLoadAverage.timestamp,
 			constants.ALERT,
@@ -48,7 +50,9 @@ const observeLoadAverage = () => {
 				currentLoadAverageTimeString,
 			),
 		);
-	} else if (previousLoadAverage && previousLoadAverage.data > constants.HIGH_LOAD_THRESHOLD) {
+	// if current load went from high to low
+	} else if (currentLoadAverage.data <= constants.HIGH_LOAD_THRESHOLD
+		&& (previousLoadAverage && previousLoadAverage.data > constants.HIGH_LOAD_THRESHOLD)) {
 		triggerLoadAlert(
 			currentLoadAverage.timestamp,
 			constants.RECOVER,

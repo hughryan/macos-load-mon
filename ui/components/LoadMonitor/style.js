@@ -15,4 +15,5 @@ export const LoadMonitorContainer = styled.div`
 export const Title = styled.h1`
 	font-family: 'Montserrat', sans-serif;
 	text-align: center;
+	margin-bottom: 10px;
 `;

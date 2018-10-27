@@ -6,6 +6,7 @@ import {
 } from 'recompose';
 import AlertList from '../AlertList';
 import LineGraph from '../LineGraph';
+import Stats from '../Stats';
 import {
 	LineGraphContainer,
 	LoadMonitorContainer,
@@ -17,12 +18,22 @@ import {
 } from '../../services/api';
 import constants from '../../constants';
 import messages from '../../messages';
+import shapes from '../shapes';
 
-const LoadMonitor = ({ graphData, alertHistory }) => (
+const LoadMonitor = ({
+	alertHistory,
+	averageLoad,
+	currentAlert,
+	currentLoad,
+	graphData,
+}) => (
 	<LoadMonitorContainer>
-		<Title>
-			{messages.TITLE}
-		</Title>
+		<Title>{messages.TITLE}</Title>
+		<Stats
+			currentLoad={currentLoad}
+			averageLoad={averageLoad}
+			currentAlert={currentAlert}
+		/>
 		<LineGraphContainer>
 			<LineGraph data={[{
 				id: messages.GRAPH_LABEL,
@@ -35,32 +46,40 @@ const LoadMonitor = ({ graphData, alertHistory }) => (
 );
 
 LoadMonitor.propTypes = {
-	graphData: PropTypes.arrayOf(PropTypes.shape({
-		x: PropTypes.instanceOf(Date),
-		y: PropTypes.number,
-	})),
-	alertHistory: PropTypes.arrayOf(PropTypes.shape({
-		type: PropTypes.oneOf([
-			constants.ALERT,
-			constants.RECOVER,
-		]),
-		message: PropTypes.string,
-	})),
+	alertHistory: PropTypes.arrayOf(shapes.Alert),
+	averageLoad: PropTypes.number,
+	currentAlert: shapes.Alert,
+	currentLoad: PropTypes.number,
+	graphData: PropTypes.arrayOf(shapes.GraphDataPoint),
 };
 
 LoadMonitor.defaultProps = {
-	graphData: [],
 	alertHistory: [],
+	graphData: [],
 };
 
 const LoadMonitorWithData = compose(
 	lifecycle({
 		componentDidMount() {
-			subscribeToLoad(({ graphData }) => {
-				this.setState({ graphData });
+			subscribeToLoad(({
+				averageLoad,
+				currentLoad,
+				graphData,
+			}) => {
+				this.setState({
+					averageLoad,
+					currentLoad,
+					graphData,
+				});
 			});
-			subscribeToAlerts(({ alertHistory }) => {
-				this.setState({ alertHistory });
+			subscribeToAlerts(({
+				alertHistory,
+				currentAlert,
+			}) => {
+				this.setState({
+					alertHistory,
+					currentAlert,
+				});
 			});
 		},
 	}),
