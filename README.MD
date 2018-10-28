@@ -1,7 +1,83 @@
-## MacOS Load Monitor
-##### A simple web application that monitors load average on your machine.
+# MacOS Load Monitor
+A simple web application built using Node.js and React that monitors load average on your mac.
 
-#### Assignment
+## Environment
+#### Node.js
+Make sure you are running the latest *Node.js LTS v8.x*. The best way to install Node is via [NVM](https://github.com/creationix/nvm), since it allows you to run multiple versions of Node alongside each other, and doesn't require root permissions.
+
+To [install NVM](https://github.com/creationix/nvm#installation) use the install script:
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+
+Then install the latest LTS of Node.js:
+```
+nvm install --lts
+```
+
+#### Yarn
+This project uses the Yarn package manager. Follow the [installation instructions](https://yarnpkg.com/en/docs/install#mac-stable). I would suggest installing it using Homebrew:
+```
+brew install yarn --without-node
+```
+
+## Install
+Install the project dependencies using Yarn. From the root directory of the project do a yarn install:
+```
+yarn install
+```
+
+## Run
+#### Production
+To build and run the application in production mode use the start command from the root directory of the project:
+```
+yarn start
+```
+
+#### Development
+To build and run the application in development mode use the dev command from the root directory of the project:
+```
+yarn dev
+```
+
+#### UI
+Once the application is running, you can access the UI from a web browser at: `http://localhost:3000`
+
+## Induce Load
+As this application monitors system load and displays alerts if the threshold is crossed, it is more interesting if we have a way of inducing load on our system. In a separate terminal, run the following script to load all your logical processors by 100%. To stop at any time, simply use `Ctrl-C`.
+```
+yarn induceLoad
+```
+
+## Test
+You can lint and run the unit tests with:
+```
+yarn test
+```
+
+## Future Improvement
+This design could be improved in a couple ways.
+
+First, it does not store anything to disk, the data is lost when the application exits. This can be improved by utilizing a timeseries database such as [Prometheus](https://prometheus.io/).
+
+Second, it is designed to monitor a single computer, and serve a limited number of UI connections. If this were to scale to monitor many systems, and serve a large number of UI connections, it would need to be split apart into microservices:
+
+#### Reporting
+A background process would run on N machines which would handle the capturing of the load data and calling out to the metrics service to store it.
+
+#### Metrics
+The metrics service would consist of an API gateway and a timeseries database. The service would handle storing and querying metrics through a REST API.
+
+#### Alerting
+The alerting service would handle routing alerts to various services, such as PagerDuty.
+
+#### Monitoring
+The monitoring service would subscribe to the metrics service and manage streaming data to client applications.
+
+#### Client
+Client applications via web or mobile can connect to the monitoring service to view realtime stats, or alerting to receive notifications, or configure alert thresholds.
+
+## Assignment
 * Collect the machine load (using “uptime” for example)
 * Display in the application the key statistics as well as a history of load over the past 10 minutes in 10s intervals. We’d suggest a graphical representation using D3.js, but feel free to use another tool or representation if you prefer. Make it easy for the end-user to picture the situation!
 * Make sure a user can keep the web page open and monitor the load on their machine.
@@ -10,26 +86,3 @@
 * Make sure all messages showing when alerting thresholds are crossed remain visible on the page for historical reasons.
 * Write a test for the alerting logic
 * Explain how you’d improve on this application design
-
-#### Assumptions
-- I only need to support one operating system - macOS is ok.
-- The only statistic we are collecting is 1 minute load average every 10 seconds.
-- The UI must be updated in realtime while it is open.
-- The test needed for the alerting logic will be a unit test rather than a functional test.
-- This application is intended to be run on a single system, with the user of that system accessing the UI through a web browser.
-- I can use any open source libraries.
-
-#### Questions
-- Does the 10-minute history graph need to display activity from before the UI was loaded in a web browser?
-  In other words, do I need to store the data collected by the application on the backend, or do we only care about realtime monitoring?
-  Will this data need to be stored longer than 10 minutes?
-- Likewise, does the alert log need to display alerts that occurred while the UI was not loaded in a web browser?
-  In other words, do I need to store the alert log on the backend?
-  Will this data need to be stored longer than 10 minutes?
-
-#### New Questions
-- Should the high load alert continue to be generated every 10 seconds while the 2 min average load exceeds 1?
-- Should the high load alert message display the 2 min average load value that triggered it or the current load value?
-- If the backend application exits, should it retain the load and alert history when restarted?
-- What "key statistics" should be displayed besides the graph of load over the past 10 minutes in 10s intervals and the alert history?
-- Should the alert history display messages older than 10 minutes?

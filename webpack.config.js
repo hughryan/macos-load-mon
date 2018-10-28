@@ -33,6 +33,7 @@ module.exports = {
 		publicPath: '/',
 		filename: 'bundle.js',
 	},
+	performance: { hints: false },
 	plugins: [
 		new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'index.html') }),
 	],
