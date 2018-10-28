@@ -2,9 +2,10 @@ const D = require('decimal.js');
 const utils = require('../utilities');
 const constants = require('../constants');
 const events = require('../events');
+const logger = require('../logger');
 
 const start = () => {
-	console.log('Monitoring load');
+	logger.info('Monitoring load');
 
 	utils.sysctl.getCpuCount().then((cpuCount) => {
 		utils.interval(() => {
@@ -17,11 +18,11 @@ const start = () => {
 				};
 				events.metric.emit('load', loadMetric);
 			}).catch((err) => {
-				console.log('Error getting load:', err);
+				logger.error('Error getting load:', err);
 			});
 		}, constants.MONITOR_INTERVAL);
 	}).catch((err) => {
-		console.log('Error getting cpu count:', err);
+		logger.error('Error getting cpu count:', err);
 	});
 };
 

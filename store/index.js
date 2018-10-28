@@ -2,6 +2,7 @@ const moment = require('moment');
 const constants = require('../constants');
 const utils = require('../utilities');
 const events = require('../events');
+const logger = require('../logger');
 
 // Data Store
 const store = {
@@ -91,7 +92,7 @@ const init = () => {
 		const load = getLastLoadMetric();
 		const average = getCurrentLoadAverage();
 
-		console.log(
+		logger.log(
 			`${load.timestamp}: load ${load.data.toFixed(2)} average ${average.data.toFixed(2)}`,
 		);
 	});

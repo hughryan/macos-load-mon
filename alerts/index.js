@@ -1,12 +1,17 @@
 const moment = require('moment');
 const constants = require('../constants');
+const events = require('../events');
 const messages = require('../messages');
 const store = require('../store');
-const events = require('../events');
+const logger = require('../logger');
 
 // Alert Data
 const alerts = {
 	load: [], // array of { timestamp, data: { type, message } }
+};
+
+const clearLoadAlerts = () => {
+	alerts.load = [];
 };
 
 // Getters
@@ -93,17 +98,18 @@ const init = () => {
 		observeLoadAverage();
 	});
 	events.alert.on(constants.ALERT, (alert) => {
-		console.log(alert.data.message);
+		logger.log(alert.data.message);
 	});
 	events.alert.on(constants.RECOVER, (alert) => {
-		console.log(alert.data.message);
+		logger.log(alert.data.message);
 	});
 };
 
 module.exports = {
-	init,
-	subscribe,
-	observeLoadAverage,
-	triggerLoadAlert,
+	clearLoadAlerts,
 	getLoadAlertHistory,
+	init,
+	observeLoadAverage,
+	subscribe,
+	triggerLoadAlert,
 };

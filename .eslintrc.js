@@ -61,7 +61,6 @@ module.exports = {
 		'max-len': ['error', { code: 120 }],
 
 		// other
-		'no-console': ['off'],
 		'no-bitwise': ['off'],
 	},
 };

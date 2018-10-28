@@ -8,19 +8,20 @@ const monitor = require('../monitor');
 const constants = require('../constants');
 const store = require('../store');
 const alerts = require('../alerts');
+const logger = require('../logger');
 
 const contentLocation = path.join(__dirname, '..', constants.DIST);
 
 const init = () => {
 	// serve the static content
 	app.use(express.static(contentLocation));
-	console.log(`Serving content from ${contentLocation}`);
+	logger.info(`Serving content from ${contentLocation}`);
 
 	// log socket connections
 	io.on('connection', (socket) => {
-		console.log(`Socket connection established: ${socket.id}`);
+		logger.log(`Socket connection established: ${socket.id}`);
 		socket.on('disconnect', () => {
-			console.log(`Socket connection terminated: ${socket.id}`);
+			logger.log(`Socket connection terminated: ${socket.id}`);
 		});
 	});
 
@@ -37,7 +38,7 @@ const init = () => {
 
 	// start the server
 	http.listen(constants.SERVER_PORT, () => {
-		console.log(`Listening on port ${constants.SERVER_PORT}`);
+		logger.info(`Listening on port ${constants.SERVER_PORT}`);
 	});
 };
 
